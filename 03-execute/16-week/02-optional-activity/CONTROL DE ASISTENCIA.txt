@@ -1,0 +1,46 @@
+CONTROL DE ASISTENCIA
+
+1. Requisitos Generales
+
+El sistema será una aplicación de escritorio o web sencilla orientada al registro y consulta de asistencia en entornos académicos.
+La interfaz debe ser simple e intuitiva, sin necesidad de capacitación técnica previa para su uso.
+Los datos deben almacenarse en una base de datos local (MySQL o SQLite).
+El sistema debe funcionar en computadores con sistema operativo Windows 10 o superior.
+Los reportes deben poder generarse en formato PDF o imprimirse directamente desde el sistema.
+El sistema debe ser multiusuario en roles: Instructor y Estudiante.
+
+
+2. Requisitos Funcionales
+
+RF-01: El sistema debe permitir al Instructor registrar un nuevo estudiante con sus datos básicos (nombre, número de documento, ficha) para tenerlo disponible en el listado de asistencia.
+RF-02: El sistema debe permitir al Instructor editar los datos de un estudiante registrado para mantener la información actualizada.
+RF-03: El sistema debe permitir al Instructor eliminar un estudiante del sistema cuando ya no pertenezca a la ficha.
+RF-04: El sistema debe permitir al Instructor buscar estudiantes por nombre o número de documento para localizar rápidamente un registro específico.
+
+— Gestión de Clases
+
+RF-05: El sistema debe permitir al Instructor crear una clase indicando la fecha, el tema y la ficha correspondiente para organizar las sesiones de asistencia.
+RF-06: El sistema debe permitir al Instructor consultar el listado de clases registradas, filtradas por fecha o ficha, para revisar el historial de sesiones.
+
+— Registro de Asistencia
+
+RF-07: El sistema debe permitir al Instructor registrar la asistencia de cada estudiante en una clase específica, marcando su estado (Presente, Ausente o Tardanza), para llevar el control de participación.
+RF-08: El sistema debe permitir al Instructor modificar el estado de asistencia de un estudiante en una clase ya registrada para corregir errores en el registro.
+RF-09: El sistema debe permitir al Estudiante consultar su propio historial de asistencia para conocer cuántas clases ha asistido y cuántas ha faltado.
+
+— Reportes
+
+RF-10: El sistema debe permitir al Instructor generar un reporte de asistencia por ficha y por rango de fechas para revisar el comportamiento del grupo.
+RF-11: El sistema debe permitir al Instructor generar un reporte individual de asistencia por estudiante para identificar casos con alta inasistencia.
+RF-12: El sistema debe permitir al Instructor exportar o imprimir los reportes generados para entregarlos físicamente o guardarlos como evidencia.
+
+ Encuesta — Estudiantes
+Tipo: Encuesta cerrada
+Dirigida a: Estudiantes de la ficha
+Propósito: Conocer la percepción del estudiante sobre el proceso actual y su interés en consultar su propia asistencia.
+Preguntas aplicadas:
+#PreguntaOpciones
+1¿Sabe cuántas fallas lleva acumuladas en el período actual?Sí / No
+2¿Le gustaría poder consultar su asistencia desde el sistema?Sí / No
+3¿Con qué frecuencia ocurren errores en su registro de asistencia?Nunca / Pocas veces / Con frecuencia
+4¿Considera que el proceso actual de toma de asistencia es lento?Sí / No5¿Ha tenido inconvenientes por asistencias mal registradas?Sí / No
