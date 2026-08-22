@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_C2"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_C2">
+    <bpmn:participant id="Participant_C2" name="Sistema de Gestión de Horarios SENA" processRef="Process_C2" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_C2" name="C2 - Consulta de Disponibilidad de Ambientes e Instructores" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_C2">
+      <bpmn:lane id="Lane_Coordinador_C2" name="Coordinador Académico">
+        <bpmn:flowNodeRef>Start_1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarFiltros</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_VisualizarResultados</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_C2" name="Motor de Disponibilidad / Backend">
+        <bpmn:flowNodeRef>Task_CalcularOcupacion</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_1" name="Necesidad de Consulta">
+      <bpmn:outgoing>F1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_IngresarFiltros" name="Ingresar Fecha, Franja Horaria y Sede">
+      <bpmn:incoming>F1</bpmn:incoming>
+      <bpmn:outgoing>F2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_CalcularOcupacion" name="Calcular Matriz de Ocupación, Sesiones y Reglas">
+      <bpmn:incoming>F2</bpmn:incoming>
+      <bpmn:outgoing>F3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_VisualizarResultados" name="Visualizar Estado de Aulas y Carga de Instructores">
+      <bpmn:incoming>F3</bpmn:incoming>
+      <bpmn:outgoing>F4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_1" name="Recursos Verificados">
+      <bpmn:incoming>F4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="F1" sourceRef="Start_1" targetRef="Task_IngresarFiltros" />
+    <bpmn:sequenceFlow id="F2" sourceRef="Task_IngresarFiltros" targetRef="Task_CalcularOcupacion" />
+    <bpmn:sequenceFlow id="F3" sourceRef="Task_CalcularOcupacion" targetRef="Task_VisualizarResultados" />
+    <bpmn:sequenceFlow id="F4" sourceRef="Task_VisualizarResultados" targetRef="End_1" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_C2">
+    <bpmndi:BPMNPlane id="BPMNPlane_C2" bpmnElement="Collaboration_C2">
+      <bpmndi:BPMNShape id="Participant_C2_di" bpmnElement="Participant_C2" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="880" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Coordinador_C2_di" bpmnElement="Lane_Coordinador_C2" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="850" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_C2_di" bpmnElement="Lane_Sistema_C2" isHorizontal="true">
+        <dc:Bounds x="160" y="250" width="850" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_1_di" bpmnElement="Start_1">
+        <dc:Bounds x="212" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="175" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_IngresarFiltros_di" bpmnElement="Task_IngresarFiltros">
+        <dc:Bounds x="300" y="110" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CalcularOcupacion_di" bpmnElement="Task_CalcularOcupacion">
+        <dc:Bounds x="480" y="300" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_VisualizarResultados_di" bpmnElement="Task_VisualizarResultados">
+        <dc:Bounds x="670" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_1_di" bpmnElement="End_1">
+        <dc:Bounds x="892" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="880" y="175" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="F1_di" bpmnElement="F1">
+        <di:waypoint x="248" y="150" />
+        <di:waypoint x="300" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F2_di" bpmnElement="F2">
+        <di:waypoint x="440" y="150" />
+        <di:waypoint x="460" y="150" />
+        <di:waypoint x="460" y="340" />
+        <di:waypoint x="480" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F3_di" bpmnElement="F3">
+        <di:waypoint x="630" y="340" />
+        <di:waypoint x="650" y="340" />
+        <di:waypoint x="650" y="150" />
+        <di:waypoint x="670" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F4_di" bpmnElement="F4">
+        <di:waypoint x="830" y="150" />
+        <di:waypoint x="892" y="150" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

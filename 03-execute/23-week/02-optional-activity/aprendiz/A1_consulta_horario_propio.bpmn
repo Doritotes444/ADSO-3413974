@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_A1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_A1">
+    <bpmn:participant id="Participant_A1" name="Sistema de Gestión de Horarios SENA" processRef="Process_A1" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_A1" name="A1 - Consulta de Horario de Ficha Propia" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_A1">
+      <bpmn:lane id="Lane_Aprendiz_A1" name="Aprendiz">
+        <bpmn:flowNodeRef>Start_A1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_VerCalendarioSemanal</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ConsultarDetalleClase</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_A1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_A1" name="Servicio de Horarios / RBAC">
+        <bpmn:flowNodeRef>Task_ResolverFichaPropia</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_A1" name="Inicio de Sesión">
+      <bpmn:outgoing>FA1_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_ResolverFichaPropia" name="Resolver Ficha Matriculada (Scope SCH_VIEW_OWN)">
+      <bpmn:incoming>FA1_1</bpmn:incoming>
+      <bpmn:outgoing>FA1_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_VerCalendarioSemanal" name="Visualizar Calendario Semanal de Clases">
+      <bpmn:incoming>FA1_2</bpmn:incoming>
+      <bpmn:outgoing>FA1_3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_ConsultarDetalleClase" name="Consultar Detalle de Clase (Ambiente, Docente, Notas)">
+      <bpmn:incoming>FA1_3</bpmn:incoming>
+      <bpmn:outgoing>FA1_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_A1" name="Horario Consultado">
+      <bpmn:incoming>FA1_4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="FA1_1" sourceRef="Start_A1" targetRef="Task_ResolverFichaPropia" />
+    <bpmn:sequenceFlow id="FA1_2" sourceRef="Task_ResolverFichaPropia" targetRef="Task_VerCalendarioSemanal" />
+    <bpmn:sequenceFlow id="FA1_3" sourceRef="Task_VerCalendarioSemanal" targetRef="Task_ConsultarDetalleClase" />
+    <bpmn:sequenceFlow id="FA1_4" sourceRef="Task_ConsultarDetalleClase" targetRef="End_A1" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_A1">
+    <bpmndi:BPMNPlane id="BPMNPlane_A1" bpmnElement="Collaboration_A1">
+      <bpmndi:BPMNShape id="Participant_A1_di" bpmnElement="Participant_A1" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="940" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Aprendiz_A1_di" bpmnElement="Lane_Aprendiz_A1" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="910" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_A1_di" bpmnElement="Lane_Sistema_A1" isHorizontal="true">
+        <dc:Bounds x="160" y="250" width="910" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_A1_di" bpmnElement="Start_A1">
+        <dc:Bounds x="212" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="175" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ResolverFichaPropia_di" bpmnElement="Task_ResolverFichaPropia">
+        <dc:Bounds x="290" y="300" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_VerCalendarioSemanal_di" bpmnElement="Task_VerCalendarioSemanal">
+        <dc:Bounds x="490" y="110" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConsultarDetalleClase_di" bpmnElement="Task_ConsultarDetalleClase">
+        <dc:Bounds x="690" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_A1_di" bpmnElement="End_A1">
+        <dc:Bounds x="902" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="175" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="FA1_1_di" bpmnElement="FA1_1">
+        <di:waypoint x="248" y="150" />
+        <di:waypoint x="270" y="150" />
+        <di:waypoint x="270" y="340" />
+        <di:waypoint x="290" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FA1_2_di" bpmnElement="FA1_2">
+        <di:waypoint x="450" y="340" />
+        <di:waypoint x="470" y="340" />
+        <di:waypoint x="470" y="150" />
+        <di:waypoint x="490" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FA1_3_di" bpmnElement="FA1_3">
+        <di:waypoint x="640" y="150" />
+        <di:waypoint x="690" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FA1_4_di" bpmnElement="FA1_4">
+        <di:waypoint x="850" y="150" />
+        <di:waypoint x="902" y="150" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

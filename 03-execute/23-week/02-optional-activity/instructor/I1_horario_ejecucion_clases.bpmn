@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_I1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_I1">
+    <bpmn:participant id="Participant_I1" name="Sistema de Gestión de Horarios SENA" processRef="Process_I1" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_I1" name="I1 - Consulta de Mi Horario y Registro de Ejecución" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_I1">
+      <bpmn:lane id="Lane_Instructor_I1" name="Instructor">
+        <bpmn:flowNodeRef>Start_I1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_VerDetalleSesion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Ejecucion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_IngresarMotivoNoEjecutada</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_I1" name="Motor de Scheduling / Auditoría">
+        <bpmn:flowNodeRef>Task_CargarHorarioDocente</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_MarcarEjecutada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_MarcarNoEjecutada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_I1</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_I1" name="Ingreso a Mi Horario">
+      <bpmn:outgoing>F_I1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_CargarHorarioDocente" name="Cargar Sesiones Semanales Asignadas">
+      <bpmn:incoming>F_I1</bpmn:incoming>
+      <bpmn:outgoing>F_I2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_VerDetalleSesion" name="Abrir Detalle de Sesión y Materiales">
+      <bpmn:incoming>F_I2</bpmn:incoming>
+      <bpmn:outgoing>F_I3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Ejecucion" name="¿Se Dictó la Clase?">
+      <bpmn:incoming>F_I3</bpmn:incoming>
+      <bpmn:outgoing>F_Ejecutada</bpmn:outgoing>
+      <bpmn:outgoing>F_NoEjecutada</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_MarcarEjecutada" name="Actualizar Estado a EXECUTED">
+      <bpmn:incoming>F_Ejecutada</bpmn:incoming>
+      <bpmn:outgoing>F_I4</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_IngresarMotivoNoEjecutada" name="Ingresar Observación de No Ejecución">
+      <bpmn:incoming>F_NoEjecutada</bpmn:incoming>
+      <bpmn:outgoing>F_I5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_MarcarNoEjecutada" name="Actualizar Estado a NOT_EXECUTED">
+      <bpmn:incoming>F_I5</bpmn:incoming>
+      <bpmn:outgoing>F_I6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="End_I1" name="Ejecución Registrada">
+      <bpmn:incoming>F_I4</bpmn:incoming>
+      <bpmn:incoming>F_I6</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="F_I1" sourceRef="Start_I1" targetRef="Task_CargarHorarioDocente" />
+    <bpmn:sequenceFlow id="F_I2" sourceRef="Task_CargarHorarioDocente" targetRef="Task_VerDetalleSesion" />
+    <bpmn:sequenceFlow id="F_I3" sourceRef="Task_VerDetalleSesion" targetRef="Gateway_Ejecucion" />
+    <bpmn:sequenceFlow id="F_Ejecutada" name="Sí" sourceRef="Gateway_Ejecucion" targetRef="Task_MarcarEjecutada" />
+    <bpmn:sequenceFlow id="F_I4" sourceRef="Task_MarcarEjecutada" targetRef="End_I1" />
+    <bpmn:sequenceFlow id="F_NoEjecutada" name="No" sourceRef="Gateway_Ejecucion" targetRef="Task_IngresarMotivoNoEjecutada" />
+    <bpmn:sequenceFlow id="F_I5" sourceRef="Task_IngresarMotivoNoEjecutada" targetRef="Task_MarcarNoEjecutada" />
+    <bpmn:sequenceFlow id="F_I6" sourceRef="Task_MarcarNoEjecutada" targetRef="End_I1" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_I1">
+    <bpmndi:BPMNPlane id="BPMNPlane_I1" bpmnElement="Collaboration_I1">
+      <bpmndi:BPMNShape id="Participant_I1_di" bpmnElement="Participant_I1" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="1080" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Instructor_I1_di" bpmnElement="Lane_Instructor_I1" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="1050" height="210" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_I1_di" bpmnElement="Lane_Sistema_I1" isHorizontal="true">
+        <dc:Bounds x="160" y="270" width="1050" height="210" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_I1_di" bpmnElement="Start_I1">
+        <dc:Bounds x="212" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="185" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_CargarHorarioDocente_di" bpmnElement="Task_CargarHorarioDocente">
+        <dc:Bounds x="290" y="330" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_VerDetalleSesion_di" bpmnElement="Task_VerDetalleSesion">
+        <dc:Bounds x="460" y="120" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Ejecucion_di" bpmnElement="Gateway_Ejecucion" isMarkerVisible="true">
+        <dc:Bounds x="645" y="135" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="638" y="105" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_MarcarEjecutada_di" bpmnElement="Task_MarcarEjecutada">
+        <dc:Bounds x="740" y="330" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_IngresarMotivoNoEjecutada_di" bpmnElement="Task_IngresarMotivoNoEjecutada">
+        <dc:Bounds x="740" y="120" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_MarcarNoEjecutada_di" bpmnElement="Task_MarcarNoEjecutada">
+        <dc:Bounds x="920" y="330" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_I1_di" bpmnElement="End_I1">
+        <dc:Bounds x="1112" y="352" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1100" y="395" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="F_I1_di" bpmnElement="F_I1">
+        <di:waypoint x="248" y="160" />
+        <di:waypoint x="270" y="160" />
+        <di:waypoint x="270" y="370" />
+        <di:waypoint x="290" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_I2_di" bpmnElement="F_I2">
+        <di:waypoint x="430" y="370" />
+        <di:waypoint x="445" y="370" />
+        <di:waypoint x="445" y="160" />
+        <di:waypoint x="460" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_I3_di" bpmnElement="F_I3">
+        <di:waypoint x="600" y="160" />
+        <di:waypoint x="645" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_Ejecutada_di" bpmnElement="F_Ejecutada">
+        <di:waypoint x="670" y="185" />
+        <di:waypoint x="670" y="370" />
+        <di:waypoint x="740" y="370" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="679" y="270" width="12" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_I4_di" bpmnElement="F_I4">
+        <di:waypoint x="880" y="370" />
+        <di:waypoint x="1112" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_NoEjecutada_di" bpmnElement="F_NoEjecutada">
+        <di:waypoint x="695" y="160" />
+        <di:waypoint x="740" y="160" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="710" y="142" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_I5_di" bpmnElement="F_I5">
+        <di:waypoint x="880" y="160" />
+        <di:waypoint x="900" y="160" />
+        <di:waypoint x="900" y="370" />
+        <di:waypoint x="920" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="F_I6_di" bpmnElement="F_I6">
+        <di:waypoint x="1060" y="370" />
+        <di:waypoint x="1112" y="370" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

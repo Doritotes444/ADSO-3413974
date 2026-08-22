@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_S1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_S1">
+    <bpmn:participant id="Participant_S1" name="Sistema de Gestión de Horarios SENA" processRef="Process_S1" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_S1" name="S1 - Generación y Gestión de Documentos Oficiales" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_S1">
+      <bpmn:lane id="Lane_Soporte_S1" name="Administrador de Soporte / Usuario">
+        <bpmn:flowNodeRef>Start_S1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_SeleccionarPlantilla</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DescargarFirmada</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ReintentarFalla</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_S1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_S1" name="Servicio de Documentos / Storage">
+        <bpmn:flowNodeRef>Task_RenderizarPDF</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_ResultadoDoc</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_S1" name="Solicitud Documental">
+      <bpmn:outgoing>FS1_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_SeleccionarPlantilla" name="Seleccionar Plantilla y Entidad de Origen">
+      <bpmn:incoming>FS1_1</bpmn:incoming>
+      <bpmn:incoming>FS1_Reintentar</bpmn:incoming>
+      <bpmn:outgoing>FS1_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_RenderizarPDF" name="Renderizar Plantilla en Segundo Plano (PDF)">
+      <bpmn:incoming>FS1_2</bpmn:incoming>
+      <bpmn:outgoing>FS1_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_ResultadoDoc" name="¿Generación Exitosa?">
+      <bpmn:incoming>FS1_3</bpmn:incoming>
+      <bpmn:outgoing>FS1_Exito</bpmn:outgoing>
+      <bpmn:outgoing>FS1_Falla</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:userTask id="Task_DescargarFirmada" name="Descargar Archivo con Enlace Temporal Seguro">
+      <bpmn:incoming>FS1_Exito</bpmn:incoming>
+      <bpmn:outgoing>FS1_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_ReintentarFalla" name="Revisar Error y Presionar Reintentar">
+      <bpmn:incoming>FS1_Falla</bpmn:incoming>
+      <bpmn:outgoing>FS1_Reintentar</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_S1" name="Documento Obtenido">
+      <bpmn:incoming>FS1_4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="FS1_1" sourceRef="Start_S1" targetRef="Task_SeleccionarPlantilla" />
+    <bpmn:sequenceFlow id="FS1_2" sourceRef="Task_SeleccionarPlantilla" targetRef="Task_RenderizarPDF" />
+    <bpmn:sequenceFlow id="FS1_3" sourceRef="Task_RenderizarPDF" targetRef="Gateway_ResultadoDoc" />
+    <bpmn:sequenceFlow id="FS1_Exito" name="Sí (AVAILABLE)" sourceRef="Gateway_ResultadoDoc" targetRef="Task_DescargarFirmada" />
+    <bpmn:sequenceFlow id="FS1_4" sourceRef="Task_DescargarFirmada" targetRef="End_S1" />
+    <bpmn:sequenceFlow id="FS1_Falla" name="No (FAILED)" sourceRef="Gateway_ResultadoDoc" targetRef="Task_ReintentarFalla" />
+    <bpmn:sequenceFlow id="FS1_Reintentar" sourceRef="Task_ReintentarFalla" targetRef="Task_SeleccionarPlantilla" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_S1">
+    <bpmndi:BPMNPlane id="BPMNPlane_S1" bpmnElement="Collaboration_S1">
+      <bpmndi:BPMNShape id="Participant_S1_di" bpmnElement="Participant_S1" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="1020" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Soporte_S1_di" bpmnElement="Lane_Soporte_S1" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="990" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_S1_di" bpmnElement="Lane_Sistema_S1" isHorizontal="true">
+        <dc:Bounds x="160" y="250" width="990" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_S1_di" bpmnElement="Start_S1">
+        <dc:Bounds x="212" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="175" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_SeleccionarPlantilla_di" bpmnElement="Task_SeleccionarPlantilla">
+        <dc:Bounds x="300" y="110" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RenderizarPDF_di" bpmnElement="Task_RenderizarPDF">
+        <dc:Bounds x="480" y="300" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_ResultadoDoc_di" bpmnElement="Gateway_ResultadoDoc" isMarkerVisible="true">
+        <dc:Bounds x="685" y="315" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="678" y="375" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DescargarFirmada_di" bpmnElement="Task_DescargarFirmada">
+        <dc:Bounds x="780" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ReintentarFalla_di" bpmnElement="Task_ReintentarFalla">
+        <dc:Bounds x="500" y="110" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_S1_di" bpmnElement="End_S1">
+        <dc:Bounds x="992" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="982" y="175" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="FS1_1_di" bpmnElement="FS1_1">
+        <di:waypoint x="248" y="150" />
+        <di:waypoint x="300" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_2_di" bpmnElement="FS1_2">
+        <di:waypoint x="450" y="150" />
+        <di:waypoint x="465" y="150" />
+        <di:waypoint x="465" y="340" />
+        <di:waypoint x="480" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_3_di" bpmnElement="FS1_3">
+        <di:waypoint x="640" y="340" />
+        <di:waypoint x="685" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_Exito_di" bpmnElement="FS1_Exito">
+        <di:waypoint x="735" y="340" />
+        <di:waypoint x="755" y="340" />
+        <di:waypoint x="755" y="150" />
+        <di:waypoint x="780" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="760" y="240" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_4_di" bpmnElement="FS1_4">
+        <di:waypoint x="940" y="150" />
+        <di:waypoint x="992" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_Falla_di" bpmnElement="FS1_Falla">
+        <di:waypoint x="710" y="315" />
+        <di:waypoint x="710" y="150" />
+        <di:waypoint x="640" y="150" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="715" y="240" width="67" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS1_Reintentar_di" bpmnElement="FS1_Reintentar">
+        <di:waypoint x="500" y="150" />
+        <di:waypoint x="450" y="150" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

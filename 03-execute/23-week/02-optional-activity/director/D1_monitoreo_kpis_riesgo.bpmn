@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_D1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_D1">
+    <bpmn:participant id="Participant_D1" name="Sistema de Gestión de Horarios SENA" processRef="Process_D1" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_D1" name="D1 - Monitoreo de Indicadores (KPIs) y Riesgo de Fichas" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_D1">
+      <bpmn:lane id="Lane_Director_D1" name="Director de Centro">
+        <bpmn:flowNodeRef>Start_D1</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_FiltrarKPIs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_DrillDownFicha</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_D1</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_D1" name="Motor de Monitoreo / Dashboard">
+        <bpmn:flowNodeRef>Task_ConsolidarMetricas</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_D1" name="Acceso a Panel">
+      <bpmn:outgoing>FD1_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Task_ConsolidarMetricas" name="Consolidar Métricas de Riesgo del Centro (ON_TRACK, AT_RISK, CRITICAL)">
+      <bpmn:incoming>FD1_1</bpmn:incoming>
+      <bpmn:outgoing>FD1_2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_FiltrarKPIs" name="Filtrar por Tipo de KPI y Visualizar Gráficas de Distribución">
+      <bpmn:incoming>FD1_2</bpmn:incoming>
+      <bpmn:outgoing>FD1_3</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_DrillDownFicha" name="Analizar Drill-Down Mensual de Ficha Crítica">
+      <bpmn:incoming>FD1_3</bpmn:incoming>
+      <bpmn:outgoing>FD1_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_D1" name="Diagnóstico Directivo Completado">
+      <bpmn:incoming>FD1_4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="FD1_1" sourceRef="Start_D1" targetRef="Task_ConsolidarMetricas" />
+    <bpmn:sequenceFlow id="FD1_2" sourceRef="Task_ConsolidarMetricas" targetRef="Task_FiltrarKPIs" />
+    <bpmn:sequenceFlow id="FD1_3" sourceRef="Task_FiltrarKPIs" targetRef="Task_DrillDownFicha" />
+    <bpmn:sequenceFlow id="FD1_4" sourceRef="Task_DrillDownFicha" targetRef="End_D1" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_D1">
+    <bpmndi:BPMNPlane id="BPMNPlane_D1" bpmnElement="Collaboration_D1">
+      <bpmndi:BPMNShape id="Participant_D1_di" bpmnElement="Participant_D1" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="940" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Director_D1_di" bpmnElement="Lane_Director_D1" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="910" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_D1_di" bpmnElement="Lane_Sistema_D1" isHorizontal="true">
+        <dc:Bounds x="160" y="250" width="910" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_D1_di" bpmnElement="Start_D1">
+        <dc:Bounds x="212" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="175" width="75" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConsolidarMetricas_di" bpmnElement="Task_ConsolidarMetricas">
+        <dc:Bounds x="290" y="300" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FiltrarKPIs_di" bpmnElement="Task_FiltrarKPIs">
+        <dc:Bounds x="490" y="110" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_DrillDownFicha_di" bpmnElement="Task_DrillDownFicha">
+        <dc:Bounds x="690" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_D1_di" bpmnElement="End_D1">
+        <dc:Bounds x="902" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="175" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="FD1_1_di" bpmnElement="FD1_1">
+        <di:waypoint x="248" y="150" />
+        <di:waypoint x="270" y="150" />
+        <di:waypoint x="270" y="340" />
+        <di:waypoint x="290" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FD1_2_di" bpmnElement="FD1_2">
+        <di:waypoint x="450" y="340" />
+        <di:waypoint x="470" y="340" />
+        <di:waypoint x="470" y="150" />
+        <di:waypoint x="490" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FD1_3_di" bpmnElement="FD1_3">
+        <di:waypoint x="640" y="150" />
+        <di:waypoint x="690" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FD1_4_di" bpmnElement="FD1_4">
+        <di:waypoint x="850" y="150" />
+        <di:waypoint x="902" y="150" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

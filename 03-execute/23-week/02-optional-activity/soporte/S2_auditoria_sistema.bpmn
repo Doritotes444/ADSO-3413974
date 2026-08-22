@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_S2"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_S2">
+    <bpmn:participant id="Participant_S2" name="Sistema de Gestión de Horarios SENA" processRef="Process_S2" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_S2" name="S2 - Trazabilidad y Auditoría del Sistema" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_S2">
+      <bpmn:lane id="Lane_Soporte_S2" name="Administrador de Soporte / Auditor">
+        <bpmn:flowNodeRef>Start_S2</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_FiltrarLogs</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_InspeccionarPayload</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_S2</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_S2" name="Servicio de Auditoría (Append-Only Log)">
+        <bpmn:flowNodeRef>Task_ConsultarLogsBD</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_S2" name="Auditoría Requerida">
+      <bpmn:outgoing>FS2_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_FiltrarLogs" name="Filtrar Eventos por Fecha, Actor, Entidad o Servicio">
+      <bpmn:incoming>FS2_1</bpmn:incoming>
+      <bpmn:outgoing>FS2_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_ConsultarLogsBD" name="Consultar Registro Inmutable y Retornar Eventos">
+      <bpmn:incoming>FS2_2</bpmn:incoming>
+      <bpmn:outgoing>FS2_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_InspeccionarPayload" name="Abrir Modal y Ver Payload JSON de Modificaciones">
+      <bpmn:incoming>FS2_3</bpmn:incoming>
+      <bpmn:outgoing>FS2_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="End_S2" name="Trazabilidad Verificada">
+      <bpmn:incoming>FS2_4</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="FS2_1" sourceRef="Start_S2" targetRef="Task_FiltrarLogs" />
+    <bpmn:sequenceFlow id="FS2_2" sourceRef="Task_FiltrarLogs" targetRef="Task_ConsultarLogsBD" />
+    <bpmn:sequenceFlow id="FS2_3" sourceRef="Task_ConsultarLogsBD" targetRef="Task_InspeccionarPayload" />
+    <bpmn:sequenceFlow id="FS2_4" sourceRef="Task_InspeccionarPayload" targetRef="End_S2" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_S2">
+    <bpmndi:BPMNPlane id="BPMNPlane_S2" bpmnElement="Collaboration_S2">
+      <bpmndi:BPMNShape id="Participant_S2_di" bpmnElement="Participant_S2" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="940" height="380" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Soporte_S2_di" bpmnElement="Lane_Soporte_S2" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="910" height="190" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_S2_di" bpmnElement="Lane_Sistema_S2" isHorizontal="true">
+        <dc:Bounds x="160" y="250" width="910" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_S2_di" bpmnElement="Start_S2">
+        <dc:Bounds x="212" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="175" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_FiltrarLogs_di" bpmnElement="Task_FiltrarLogs">
+        <dc:Bounds x="300" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ConsultarLogsBD_di" bpmnElement="Task_ConsultarLogsBD">
+        <dc:Bounds x="490" y="300" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_InspeccionarPayload_di" bpmnElement="Task_InspeccionarPayload">
+        <dc:Bounds x="690" y="110" width="160" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_S2_di" bpmnElement="End_S2">
+        <dc:Bounds x="902" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="890" y="175" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="FS2_1_di" bpmnElement="FS2_1">
+        <di:waypoint x="248" y="150" />
+        <di:waypoint x="300" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS2_2_di" bpmnElement="FS2_2">
+        <di:waypoint x="460" y="150" />
+        <di:waypoint x="475" y="150" />
+        <di:waypoint x="475" y="340" />
+        <di:waypoint x="490" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS2_3_di" bpmnElement="FS2_3">
+        <di:waypoint x="650" y="340" />
+        <di:waypoint x="670" y="340" />
+        <di:waypoint x="670" y="150" />
+        <di:waypoint x="690" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="FS2_4_di" bpmnElement="FS2_4">
+        <di:waypoint x="850" y="150" />
+        <di:waypoint x="902" y="150" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

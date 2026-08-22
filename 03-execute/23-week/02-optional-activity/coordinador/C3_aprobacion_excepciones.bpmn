@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_C3"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:collaboration id="Collaboration_C3">
+    <bpmn:participant id="Participant_C3" name="Sistema de Gestión de Horarios SENA" processRef="Process_C3" />
+  </bpmn:collaboration>
+
+  <bpmn:process id="Process_C3" name="C3 - Revisión y Aprobación de Excepciones de Instructor" isExecutable="true">
+    <bpmn:laneSet id="LaneSet_C3">
+      <bpmn:lane id="Lane_Coordinador_C3" name="Coordinador Académico">
+        <bpmn:flowNodeRef>Start_C3</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_RevisarSolicitud</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Gateway_Aprobacion</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_ReprogramarSesiones</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_MotivoRechazo</bpmn:flowNodeRef>
+      </bpmn:lane>
+      <bpmn:lane id="Lane_Sistema_C3" name="Servicio de Disponibilidad y Notificaciones">
+        <bpmn:flowNodeRef>Task_EstadoAprobado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_EstadoRechazado</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_NotificarInstructor</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>End_C3</bpmn:flowNodeRef>
+      </bpmn:lane>
+    </bpmn:laneSet>
+
+    <bpmn:startEvent id="Start_C3" name="Recepción de Solicitud Pendiente">
+      <bpmn:outgoing>Seq_1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:userTask id="Task_RevisarSolicitud" name="Revisar Solicitud y Soporte PDF">
+      <bpmn:incoming>Seq_1</bpmn:incoming>
+      <bpmn:outgoing>Seq_2</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_Aprobacion" name="¿Aprobar Excepción?">
+      <bpmn:incoming>Seq_2</bpmn:incoming>
+      <bpmn:outgoing>Seq_Aprobada</bpmn:outgoing>
+      <bpmn:outgoing>Seq_Rechazada</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="Task_EstadoAprobado" name="Actualizar Estado a APPROVED">
+      <bpmn:incoming>Seq_Aprobada</bpmn:incoming>
+      <bpmn:outgoing>Seq_3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Task_ReprogramarSesiones" name="Reprogramar Sesiones con Colisión">
+      <bpmn:incoming>Seq_3</bpmn:incoming>
+      <bpmn:outgoing>Seq_4</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Task_MotivoRechazo" name="Registrar Justificación de Rechazo">
+      <bpmn:incoming>Seq_Rechazada</bpmn:incoming>
+      <bpmn:outgoing>Seq_5</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Task_EstadoRechazado" name="Actualizar Estado a REJECTED">
+      <bpmn:incoming>Seq_5</bpmn:incoming>
+      <bpmn:outgoing>Seq_6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Task_NotificarInstructor" name="Notificar Decisión al Instructor">
+      <bpmn:incoming>Seq_4</bpmn:incoming>
+      <bpmn:incoming>Seq_6</bpmn:incoming>
+      <bpmn:outgoing>Seq_7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="End_C3" name="Novedad Procesada">
+      <bpmn:incoming>Seq_7</bpmn:incoming>
+    </bpmn:endEvent>
+
+    <bpmn:sequenceFlow id="Seq_1" sourceRef="Start_C3" targetRef="Task_RevisarSolicitud" />
+    <bpmn:sequenceFlow id="Seq_2" sourceRef="Task_RevisarSolicitud" targetRef="Gateway_Aprobacion" />
+    <bpmn:sequenceFlow id="Seq_Aprobada" name="Aprobada" sourceRef="Gateway_Aprobacion" targetRef="Task_EstadoAprobado" />
+    <bpmn:sequenceFlow id="Seq_3" sourceRef="Task_EstadoAprobado" targetRef="Task_ReprogramarSesiones" />
+    <bpmn:sequenceFlow id="Seq_4" sourceRef="Task_ReprogramarSesiones" targetRef="Task_NotificarInstructor" />
+    <bpmn:sequenceFlow id="Seq_Rechazada" name="Rechazada" sourceRef="Gateway_Aprobacion" targetRef="Task_MotivoRechazo" />
+    <bpmn:sequenceFlow id="Seq_5" sourceRef="Task_MotivoRechazo" targetRef="Task_EstadoRechazado" />
+    <bpmn:sequenceFlow id="Seq_6" sourceRef="Task_EstadoRechazado" targetRef="Task_NotificarInstructor" />
+    <bpmn:sequenceFlow id="Seq_7" sourceRef="Task_NotificarInstructor" targetRef="End_C3" />
+  </bpmn:process>
+
+  <bpmndi:BPMNDiagram id="BPMNDiagram_C3">
+    <bpmndi:BPMNPlane id="BPMNPlane_C3" bpmnElement="Collaboration_C3">
+      <bpmndi:BPMNShape id="Participant_C3_di" bpmnElement="Participant_C3" isHorizontal="true">
+        <dc:Bounds x="130" y="60" width="1120" height="420" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Coordinador_C3_di" bpmnElement="Lane_Coordinador_C3" isHorizontal="true">
+        <dc:Bounds x="160" y="60" width="1090" height="230" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Lane_Sistema_C3_di" bpmnElement="Lane_Sistema_C3" isHorizontal="true">
+        <dc:Bounds x="160" y="290" width="1090" height="190" />
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNShape id="Start_C3_di" bpmnElement="Start_C3">
+        <dc:Bounds x="212" y="142" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="195" y="185" width="70" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_RevisarSolicitud_di" bpmnElement="Task_RevisarSolicitud">
+        <dc:Bounds x="300" y="120" width="130" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_Aprobacion_di" bpmnElement="Gateway_Aprobacion" isMarkerVisible="true">
+        <dc:Bounds x="475" y="135" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="468" y="105" width="65" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EstadoAprobado_di" bpmnElement="Task_EstadoAprobado">
+        <dc:Bounds x="560" y="340" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_ReprogramarSesiones_di" bpmnElement="Task_ReprogramarSesiones">
+        <dc:Bounds x="740" y="120" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_MotivoRechazo_di" bpmnElement="Task_MotivoRechazo">
+        <dc:Bounds x="560" y="190" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_EstadoRechazado_di" bpmnElement="Task_EstadoRechazado">
+        <dc:Bounds x="740" y="340" width="140" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Task_NotificarInstructor_di" bpmnElement="Task_NotificarInstructor">
+        <dc:Bounds x="930" y="340" width="150" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="End_C3_di" bpmnElement="End_C3">
+        <dc:Bounds x="1142" y="362" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1132" y="405" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+
+      <bpmndi:BPMNEdge id="Seq_1_di" bpmnElement="Seq_1">
+        <di:waypoint x="248" y="160" />
+        <di:waypoint x="300" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_2_di" bpmnElement="Seq_2">
+        <di:waypoint x="430" y="160" />
+        <di:waypoint x="475" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_Aprobada_di" bpmnElement="Seq_Aprobada">
+        <di:waypoint x="500" y="185" />
+        <di:waypoint x="500" y="380" />
+        <di:waypoint x="560" y="380" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="506" y="240" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_3_di" bpmnElement="Seq_3">
+        <di:waypoint x="700" y="380" />
+        <di:waypoint x="720" y="380" />
+        <di:waypoint x="720" y="160" />
+        <di:waypoint x="740" y="160" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_4_di" bpmnElement="Seq_4">
+        <di:waypoint x="880" y="160" />
+        <di:waypoint x="900" y="160" />
+        <di:waypoint x="900" y="380" />
+        <di:waypoint x="930" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_Rechazada_di" bpmnElement="Seq_Rechazada">
+        <di:waypoint x="525" y="160" />
+        <di:waypoint x="540" y="160" />
+        <di:waypoint x="540" y="230" />
+        <di:waypoint x="560" y="230" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="502" y="185" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_5_di" bpmnElement="Seq_5">
+        <di:waypoint x="700" y="230" />
+        <di:waypoint x="720" y="230" />
+        <di:waypoint x="720" y="360" />
+        <di:waypoint x="740" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_6_di" bpmnElement="Seq_6">
+        <di:waypoint x="880" y="380" />
+        <di:waypoint x="930" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Seq_7_di" bpmnElement="Seq_7">
+        <di:waypoint x="1080" y="380" />
+        <di:waypoint x="1142" y="380" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
