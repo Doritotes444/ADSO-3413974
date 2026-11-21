@@ -34,13 +34,13 @@ Se verificaron de forma no intrusiva las siguientes ubicaciones del sistema (`C:
 
 1. **Espacio de trabajo del IDE (`Antigravity`):**
    - Estado reportado por el sistema: `No active workspace`.
-2. **Directorios de proyectos en [`scratch`](file:///C:/Users/Aprendiz/.gemini/antigravity/scratch):**
+2. **Directorios de proyectos en `C:\Users\Aprendiz\.gemini\antigravity\scratch` (`scratch`):**
    - Contienen proyectos anteriores de pruebas técnicas SDD (`simple-stock-flow`, `test-simple-stock-flow`, `kevin-ref`, `manager-library`, `manager-library-docs`, `microservices-governance-framework`, `monolith-governance-framework`, `sistema-taller-automotriz`, `Sistema-de-asistencia`), pero **ningún directorio o archivo perteneciente a `Orderflow Engine`**.
-3. **Directorios del usuario ([`Desktop`](file:///C:/Users/Aprendiz/Desktop), [`Documents`](file:///C:/Users/Aprendiz/Documents), [`Downloads`](file:///C:/Users/Aprendiz/Downloads), [`source/repos`](file:///C:/Users/Aprendiz/source/repos)):**
+3. **Directorios del usuario (`Desktop`, `Documents`, `Downloads`, `source/repos`):**
    - Última modificación en `Downloads`: `14/10/2026`.
    - Última modificación en `Desktop`: `16/10/2026`.
    - Proyectos presentes: `GESTION_NEIVA_CLAUDE-main`, `futbolred`, `practicapoocolabarotiva`, `AlvaroGitHub`. Ninguno corresponde a `Orderflow Engine`.
-4. **Caché de compilación Java / Maven ([`.m2/repository`](file:///C:/Users/Aprendiz/.m2/repository) y [`.sts4`](file:///C:/Users/Aprendiz/.sts4)):**
+4. **Caché de compilación Java / Maven (`.m2/repository` y `.sts4`):**
    - Solo registra índices de diagnóstico de `futbolred`. No existen artefactos compilados ni dependencias descargadas asociadas a `Orderflow Engine` (como Liquibase, Testcontainers, ArchUnit o PIT).
 5. **Raíz del sistema (`C:\`):**
    - Se revisaron `C:\app`, `C:\docker`, `C:\taller_mongodb_adso`, `C:\FaceLit*` y `C:\xampp\htdocs`.
